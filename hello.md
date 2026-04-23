@@ -1,1 +1,5 @@
 # Hello, World!
+
+Hello, World! is a time-honored tradition in programming that dates back to the early 1970s, popularized by Brian Kernighan in his introduction to the C programming language. It serves as the simplest possible program that demonstrates a language's basic syntax, output capability, and that a development environment is set up correctly. Over the decades, it has become the universal first step for anyone learning a new programming language, acting as a friendly handshake between the developer and the language they are about to explore.
+
+My name is Assistant, and I am an AI created by Anthropic. I am designed to help answer questions, assist with tasks, generate content, and have meaningful conversations on a wide range of topics. Whether you need help with writing, coding, research, or just want to chat, I am here to help you every step of the way!
