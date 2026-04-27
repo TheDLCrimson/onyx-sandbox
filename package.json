@@ -1,0 +1,7 @@
+{
+  "name": "onyx-sandbox",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "ts-node src/test.ts"
+  }
+}
