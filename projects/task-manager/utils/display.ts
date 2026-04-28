@@ -1,19 +1,19 @@
-import chalk from "chalk";
-import { Task, Priority } from "../types";
+import chalk, { ChalkInstance } from "chalk";
+import { Priority, Task } from "../types";
 import { formatDue, isOverdue } from "./date";
 
 // ── Colour helpers ────────────────────────────────────────────────────────────
 
-const PRIORITY_COLOUR: Record<Priority, chalk.Chalk> = {
-  high:   chalk.bold.red,
+const PRIORITY_COLOUR: Record<Priority, ChalkInstance> = {
+  high: chalk.bold.red,
   medium: chalk.bold.yellow,
-  low:    chalk.bold.green,
+  low: chalk.bold.green,
 };
 
 const PRIORITY_ICON: Record<Priority, string> = {
-  high:   "🔴",
+  high: "🔴",
   medium: "🟡",
-  low:    "🟢",
+  low: "🟢",
 };
 
 function priorityLabel(p: Priority): string {
@@ -41,10 +41,16 @@ function shortId(id: string): string {
 
 // ── Public renderers ──────────────────────────────────────────────────────────
 
+export function padEndVisible(str: string, len: number): string {
+  const plain = str.replace(/\x1b\[[0-9;]*m/g, "");
+  const padding = Math.max(0, len - plain.length);
+  return str + " ".repeat(padding);
+}
+
 export function printTask(task: Task): void {
   const dim = chalk.dim("│");
   console.log(
-    `\n  ${shortId(task.id)}  ${task.done ? chalk.strikethrough.gray(task.title) : chalk.white.bold(task.title)}`
+    `\n  ${shortId(task.id)}  ${task.done ? chalk.strikethrough.gray(task.title) : chalk.white.bold(task.title)}`,
   );
   console.log(`  ${dim} Status  : ${statusLabel(task.done)}`);
   console.log(`  ${dim} Priority: ${priorityLabel(task.priority)}`);
@@ -59,25 +65,51 @@ export function printTaskList(tasks: Task[]): void {
   }
 
   console.log(
-    chalk.dim(`\n  ${"ID".padEnd(10)}${"TITLE".padEnd(36)}${"STATUS".padEnd(10)}${"PRIORITY".padEnd(10)}${"DUE".padEnd(18)}TAGS`)
+    chalk.dim(
+      `\n  ${"ID".padEnd(10)}${"TITLE".padEnd(36)}${"STATUS".padEnd(10)}${"PRIORITY".padEnd(10)}${"DUE".padEnd(18)}TAGS`,
+    ),
   );
   console.log(chalk.dim("  " + "─".repeat(90)));
 
   for (const task of tasks) {
-    const id       = task.id.slice(0, 8).padEnd(10);
-    const title    = truncate(task.done ? chalk.strikethrough.gray(task.title) : chalk.white(task.title), 34).padEnd(34);
-    const status   = (task.done ? chalk.green("✔ done") : chalk.gray("○ open")).padEnd(10);
-    const priority = `${PRIORITY_ICON[task.priority]} ${task.priority}`.padEnd(10);
-    const due      = task.dueDate
-      ? (isOverdue(task.dueDate) ? chalk.red(task.dueDate) : chalk.cyan(task.dueDate)).padEnd(18)
-      : chalk.gray("—").padEnd(18);
-    const tags     = task.tags.length ? task.tags.map((t) => chalk.magenta(`#${t}`)).join(" ") : chalk.gray("—");
+    const id = task.id.slice(0, 8).padEnd(10);
+    const title = padEndVisible(
+      truncate(
+        task.done
+          ? chalk.strikethrough.gray(task.title)
+          : chalk.white(task.title),
+        34,
+      ),
+      34,
+    );
+    const status = padEndVisible(
+      task.done ? chalk.green("✔ done") : chalk.gray("○ open"),
+      10,
+    );
+    const priority = `${PRIORITY_ICON[task.priority]} ${task.priority}`.padEnd(
+      10,
+    );
+    const due = task.dueDate
+      ? padEndVisible(
+          isOverdue(task.dueDate)
+            ? chalk.red(task.dueDate)
+            : chalk.cyan(task.dueDate),
+          18,
+        )
+      : padEndVisible(chalk.gray("—"), 18);
+    const tags = task.tags.length
+      ? task.tags.map((t) => chalk.magenta(`#${t}`)).join(" ")
+      : chalk.gray("—");
 
-    console.log(`  ${chalk.gray(id)}${title}  ${status}${priority}  ${due}${tags}`);
+    console.log(
+      `  ${chalk.gray(id)}${title}  ${status}${priority}  ${due}${tags}`,
+    );
   }
 
   console.log(chalk.dim("  " + "─".repeat(90)));
-  console.log(chalk.dim(`  ${tasks.length} task${tasks.length === 1 ? "" : "s"}\n`));
+  console.log(
+    chalk.dim(`  ${tasks.length} task${tasks.length === 1 ? "" : "s"}\n`),
+  );
 }
 
 export function printSuccess(msg: string): void {

@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "id": "30fcc427-2ac8-4956-afa8-f9f790612927",
+    "title": "Buy groceries",
+    "tags": [
+      "personal errands"
+    ],
+    "priority": "high",
+    "dueDate": "2025-08-10",
+    "done": false,
+    "createdAt": "2026-04-28T15:35:53.613Z",
+    "updatedAt": "2026-04-28T15:35:53.614Z"
+  },
+  {
+    "id": "f8849c8a-d1db-4d54-8e5a-542901b558b7",
+    "title": "Write unit tests",
+    "tags": [
+      "work dev"
+    ],
+    "priority": "low",
+    "done": false,
+    "createdAt": "2026-04-28T15:38:16.751Z",
+    "updatedAt": "2026-04-28T15:53:57.423Z",
+    "dueDate": "2025-09-01"
+  },
+  {
+    "id": "26ad0703-ea76-42b3-a65f-93d3397ab238",
+    "title": "Read a book",
+    "tags": [
+      "personal"
+    ],
+    "priority": "low",
+    "done": false,
+    "createdAt": "2026-04-28T15:39:27.444Z",
+    "updatedAt": "2026-04-28T15:39:27.445Z"
+  }
+]
