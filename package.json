@@ -2,7 +2,7 @@
   "name": "onyx-sandbox",
   "version": "1.0.0",
   "scripts": {
-    "dev": "ts-node src/tictactoe.ts"
+    "dev": "ts-node projects/tictactoe/tictactoe.ts"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
