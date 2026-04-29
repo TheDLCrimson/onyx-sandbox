@@ -28,14 +28,6 @@ function ask(question: string): Promise<string> {
   return new Promise((resolve) => rl.question(question, resolve));
 }
 
-// ─── Input flush helper ───────────────────────────────────────────────────────
-
-function flushAndLineMode(): Promise<void> {
-  process.stdin.setRawMode(false);
-  process.stdin.resume();
-  return new Promise((resolve) => setTimeout(resolve, 50));
-}
-
 // ─── Game loop ────────────────────────────────────────────────────────────────
 
 function runGameLoop(state: GameState): Promise<void> {
@@ -87,6 +79,16 @@ function runGameLoop(state: GameState): Promise<void> {
   });
 }
 
+// ─── Stdin helper ─────────────────────────────────────────────────────────────
+
+/** Switch stdin back to line mode and drain any buffered raw-mode keypresses. */
+function flushAndLineMode(): Promise<void> {
+  process.stdin.setRawMode(false);
+  process.stdin.resume();
+  // Drain buffered data (arrow keys etc.) that arrived during raw mode
+  return new Promise((resolve) => setTimeout(resolve, 50));
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main(): Promise<void> {
@@ -95,6 +97,7 @@ async function main(): Promise<void> {
   try {
     renderWelcome();
 
+    // Re-enable line mode temporarily for the first prompt
     await flushAndLineMode();
     await ask("  Press ENTER to start...");
 
