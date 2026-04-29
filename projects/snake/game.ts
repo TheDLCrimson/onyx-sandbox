@@ -1,4 +1,3 @@
-projects/snake/game.ts
 export type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";
 
 export interface Point {
@@ -78,7 +77,7 @@ export function stepGame(state: GameState): void {
   if (state.direction === "LEFT") newHead.x -= 1;
   if (state.direction === "RIGHT") newHead.x += 1;
 
-  // Wall wrap-through
+  // Wall wrap-through (teleport to opposite side)
   newHead.x = ((newHead.x % state.width) + state.width) % state.width;
   newHead.y = ((newHead.y % state.height) + state.height) % state.height;
 
