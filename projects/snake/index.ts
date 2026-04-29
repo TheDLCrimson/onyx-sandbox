@@ -1,26 +1,19 @@
-projects/snake/index.ts
-```
 import * as readline from "readline";
-import {
-  createGame,
-  stepGame,
-  tickInterval,
-  GameState,
-} from "./game";
+import { createGame, GameState, stepGame, tickInterval } from "./game";
 import { setupInput } from "./input";
 import {
   clearScreen,
   hideCursor,
-  showCursor,
-  renderFrame,
   renderDeathFlash,
+  renderFrame,
   renderGameOver,
   renderWelcome,
+  showCursor,
 } from "./renderer";
 
 // ─── Readline helper (for play-again prompt) ──────────────────────────────────
 
-const rl = readline.createInterface({
+let rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
@@ -35,16 +28,16 @@ function ask(question: string): Promise<string> {
  * Switch stdin back to line mode and drain any buffered raw-mode keypresses
  * (arrow keys, etc.) so they don't bleed into the readline prompt.
  */
-function flushAndLineMode(): Promise<void> {
-  return new Promise((resolve) => {
-    const discard = () => {}; // eat every buffered chunk
-    process.stdin.resume();
-    process.stdin.on("data", discard);
-    setTimeout(() => {
-      process.stdin.off("data", discard);
-      process.stdin.setRawMode(false);
-      resolve();
-    }, 80);
+async function flushAndLineMode(): Promise<void> {
+  // Give the event loop one tick to process any pending data events,
+  // then hard-pause so nothing else sneaks through.
+  await new Promise<void>((r) => setImmediate(r));
+  process.stdin.pause();
+  // Recreate rl so readline's internal line buffer is wiped clean
+  rl.close();
+  rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
   });
 }
 
@@ -138,4 +131,3 @@ main().catch((err) => {
   rl.close();
   process.exit(1);
 });
-```
