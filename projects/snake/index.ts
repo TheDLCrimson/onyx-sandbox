@@ -1,3 +1,5 @@
+projects/snake/index.ts
+```
 import * as readline from "readline";
 import {
   createGame,
@@ -34,10 +36,16 @@ function ask(question: string): Promise<string> {
  * (arrow keys, etc.) so they don't bleed into the readline prompt.
  */
 function flushAndLineMode(): Promise<void> {
-  process.stdin.setRawMode(false);
-  process.stdin.resume();
-  // Small pause lets Node flush the internal read buffer before readline takes over
-  return new Promise((resolve) => setTimeout(resolve, 50));
+  return new Promise((resolve) => {
+    const discard = () => {}; // eat every buffered chunk
+    process.stdin.resume();
+    process.stdin.on("data", discard);
+    setTimeout(() => {
+      process.stdin.off("data", discard);
+      process.stdin.setRawMode(false);
+      resolve();
+    }, 80);
+  });
 }
 
 // ─── Game loop ────────────────────────────────────────────────────────────────
@@ -130,3 +138,4 @@ main().catch((err) => {
   rl.close();
   process.exit(1);
 });
+```
