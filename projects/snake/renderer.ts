@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import chalk, { ChalkInstance } from "chalk";
 import { GameState, Direction } from "./game";
 
 // ─── ANSI helpers ────────────────────────────────────────────────────────────
@@ -35,7 +35,7 @@ const EMPTY_GLYPH = " ";
 // ─── Gradient helper ─────────────────────────────────────────────────────────
 // Interpolates from bright lime (head) to dark green (tail) across the body.
 
-function snakeColor(index: number, total: number, dead: boolean): chalk.Chalk {
+function snakeColor(index: number, total: number, dead: boolean): ChalkInstance {
   if (dead) return chalk.rgb(220, 30, 30);
 
   // index 0 = head (bright), index total-1 = tail (dark)
