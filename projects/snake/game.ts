@@ -77,16 +77,9 @@ export function stepGame(state: GameState): void {
   if (state.direction === "LEFT") newHead.x -= 1;
   if (state.direction === "RIGHT") newHead.x += 1;
 
-  // Wall collision
-  if (
-    newHead.x < 0 ||
-    newHead.x >= state.width ||
-    newHead.y < 0 ||
-    newHead.y >= state.height
-  ) {
-    state.alive = false;
-    return;
-  }
+  // Wall wrap-through (teleport to opposite side)
+  newHead.x = ((newHead.x % state.width) + state.width) % state.width;
+  newHead.y = ((newHead.y % state.height) + state.height) % state.height;
 
   // Self collision
   if (state.snake.some((s) => s.x === newHead.x && s.y === newHead.y)) {
