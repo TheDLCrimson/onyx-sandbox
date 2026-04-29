@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { Snippet } from "./types";
 
-const DATA_PATH = path.resolve(__dirname, "../../data/snippets.json");
+const DATA_PATH = path.resolve(__dirname, "../data/snippets.json");
 
 export function readSnippets(): Snippet[] {
   if (!fs.existsSync(DATA_PATH)) {
