@@ -1,3 +1,4 @@
+projects/snake/index.ts
 import * as readline from "readline";
 import {
   createGame,
@@ -25,6 +26,14 @@ const rl = readline.createInterface({
 
 function ask(question: string): Promise<string> {
   return new Promise((resolve) => rl.question(question, resolve));
+}
+
+// ─── Input flush helper ───────────────────────────────────────────────────────
+
+function flushAndLineMode(): Promise<void> {
+  process.stdin.setRawMode(false);
+  process.stdin.resume();
+  return new Promise((resolve) => setTimeout(resolve, 50));
 }
 
 // ─── Game loop ────────────────────────────────────────────────────────────────
@@ -86,7 +95,7 @@ async function main(): Promise<void> {
   try {
     renderWelcome();
 
-    // Re-enable line mode temporarily for the first prompt
+    await flushAndLineMode();
     await ask("  Press ENTER to start...");
 
     while (true) {
@@ -94,10 +103,7 @@ async function main(): Promise<void> {
       const state = createGame(20, 20);
       await runGameLoop(state);
 
-      // Re-enable stdin line mode for the prompt
-      process.stdin.setRawMode(false);
-      process.stdin.resume();
-
+      await flushAndLineMode();
       const answer = await ask("  Play again? (y/n): ");
       console.log();
 
