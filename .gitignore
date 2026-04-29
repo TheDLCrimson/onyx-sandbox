@@ -140,3 +140,6 @@ vite.config.ts.timestamp-*
 
 # Task Manager data
 projects/task-manager/tasks.json
+
+# Claude
+.claude

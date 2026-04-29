@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "id": "6056f71e-2a39-46e7-a652-b33393f2f122",
+    "title": "My Script",
+    "language": "bash",
+    "tags": [
+      "ops"
+    ],
+    "code": "echo hello\r\n",
+    "createdAt": "2026-04-29T12:50:09.371Z",
+    "updatedAt": "2026-04-29T12:50:09.371Z"
+  },
+  {
+    "id": "75cef6f9-30d0-4b27-9a1c-860d12b45b4e",
+    "title": "Format Bytes",
+    "language": "typescript",
+    "tags": [
+      "scraps"
+    ],
+    "code": "/**\r\n * formatBytes — tiny utility for turning raw byte counts into readable strings.\r\n *\r\n * Usage:\r\n *   formatBytes(1024)                  // \"1.00 KiB\"  (IEC, base-2 by default)\r\n *   formatBytes(1000, { si: true })    // \"1.00 KB\"   (SI, base-10)\r\n *   formatBytes(1536, { decimals: 1 }) // \"1.5 KiB\"\r\n */\r\n\r\ninterface FormatBytesOptions {\r\n  /** Use SI (base-10) units — KB, MB, GB … instead of KiB, MiB, GiB … */\r\n  si?: boolean;\r\n  /** Number of decimal places. Defaults to 2. */\r\n  decimals?: number;\r\n}\r\n\r\nexport function formatBytes(\r\n  bytes: number,\r\n  { si = false, decimals = 2 }: FormatBytesOptions = {}\r\n): string {\r\n  if (!Number.isFinite(bytes) || bytes < 0) {\r\n    throw new RangeError(`bytes must be a finite non-negative number, got ${bytes}`);\r\n  }\r\n\r\n  const base = si ? 1000 : 1024;\r\n  const units = si\r\n    ? [\"B\", \"KB\", \"MB\", \"GB\", \"TB\", \"PB\", \"EB\"]\r\n    : [\"B\", \"KiB\", \"MiB\", \"GiB\", \"TiB\", \"PiB\", \"EiB\"];\r\n\r\n  if (bytes < base) {\r\n    return `${bytes} B`;\r\n  }\r\n\r\n  const exponent = Math.min(\r\n    Math.floor(Math.log(bytes) / Math.log(base)),\r\n    units.length - 1\r\n  );\r\n\r\n  const value = bytes / Math.pow(base, exponent);\r\n  return `${value.toFixed(decimals)} ${units[exponent]}`;\r\n}\r\n\r\n// ─── Demo ────────────────────────────────────────────────────────────────────\r\n\r\nif (require.main === module) {\r\n  const samples = [0, 512, 1023, 1024, 1536, 1_000_000, 1_048_576, 1_500_000_000, 2 ** 40];\r\n\r\n  console.log(\"── IEC (base-2, default) ──────────────────\");\r\n  for (const n of samples) {\r\n    console.log(`  ${String(n).padStart(15)} B  →  ${formatBytes(n)}`);\r\n  }\r\n\r\n  console.log(\"\\n── SI  (base-10)  ─────────────────────────\");\r\n  for (const n of samples) {\r\n    console.log(`  ${String(n).padStart(15)} B  →  ${formatBytes(n, { si: true })}`);\r\n  }\r\n\r\n  console.log(\"\\n── Custom decimals (1) ─────────────────────\");\r\n  for (const n of samples) {\r\n    console.log(`  ${String(n).padStart(15)} B  →  ${formatBytes(n, { decimals: 1 })}`);\r\n  }\r\n}\r\n",
+    "createdAt": "2026-04-29T12:58:38.427Z",
+    "updatedAt": "2026-04-29T12:58:38.427Z"
+  }
+]
