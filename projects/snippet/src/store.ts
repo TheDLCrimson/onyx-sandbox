@@ -15,6 +15,7 @@ export function readSnippets(): Snippet[] {
 
 export function writeSnippets(snippets: Snippet[]): void {
   fs.writeFileSync(DATA_PATH, JSON.stringify(snippets, null, 2), "utf-8");
+  console.log(`Data saved to: ${DATA_PATH}`);
 }
 
 export function findById(id: string): Snippet | undefined {
