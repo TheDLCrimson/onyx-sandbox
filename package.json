@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "ts-node projects/tictactoe/tictactoe.ts",
-    "task": "ts-node projects/task-manager/index.ts"
+    "task": "ts-node projects/task-manager/index.ts",
+    "snippet": "ts-node projects/snippet/src/index.ts"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
