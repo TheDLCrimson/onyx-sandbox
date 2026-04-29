@@ -1,3 +1,5 @@
+projects/snake/game.ts
+```
 export type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";
 
 export interface Point {
@@ -77,16 +79,9 @@ export function stepGame(state: GameState): void {
   if (state.direction === "LEFT") newHead.x -= 1;
   if (state.direction === "RIGHT") newHead.x += 1;
 
-  // Wall collision
-  if (
-    newHead.x < 0 ||
-    newHead.x >= state.width ||
-    newHead.y < 0 ||
-    newHead.y >= state.height
-  ) {
-    state.alive = false;
-    return;
-  }
+  // Wrap around walls
+  newHead.x = ((newHead.x % state.width) + state.width) % state.width;
+  newHead.y = ((newHead.y % state.height) + state.height) % state.height;
 
   // Self collision
   if (state.snake.some((s) => s.x === newHead.x && s.y === newHead.y)) {
@@ -113,3 +108,4 @@ export function tickInterval(speed: number): number {
   // 120ms at speed 1, floors at 50ms
   return Math.max(50, 120 - (speed - 1) * 10);
 }
+```
