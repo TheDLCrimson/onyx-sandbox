@@ -1,4 +1,3 @@
-projects/snake/index.ts
 import * as readline from "readline";
 import {
   createGame,
@@ -26,6 +25,19 @@ const rl = readline.createInterface({
 
 function ask(question: string): Promise<string> {
   return new Promise((resolve) => rl.question(question, resolve));
+}
+
+// ─── Stdin helper ─────────────────────────────────────────────────────────────
+
+/**
+ * Switch stdin back to line mode and drain any buffered raw-mode keypresses
+ * (arrow keys, etc.) so they don't bleed into the readline prompt.
+ */
+function flushAndLineMode(): Promise<void> {
+  process.stdin.setRawMode(false);
+  process.stdin.resume();
+  // Small pause lets Node flush the internal read buffer before readline takes over
+  return new Promise((resolve) => setTimeout(resolve, 50));
 }
 
 // ─── Game loop ────────────────────────────────────────────────────────────────
@@ -79,16 +91,6 @@ function runGameLoop(state: GameState): Promise<void> {
   });
 }
 
-// ─── Stdin helper ─────────────────────────────────────────────────────────────
-
-/** Switch stdin back to line mode and drain any buffered raw-mode keypresses. */
-function flushAndLineMode(): Promise<void> {
-  process.stdin.setRawMode(false);
-  process.stdin.resume();
-  // Drain buffered data (arrow keys etc.) that arrived during raw mode
-  return new Promise((resolve) => setTimeout(resolve, 50));
-}
-
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main(): Promise<void> {
@@ -97,7 +99,7 @@ async function main(): Promise<void> {
   try {
     renderWelcome();
 
-    // Re-enable line mode temporarily for the first prompt
+    // Ensure clean line mode before the first prompt
     await flushAndLineMode();
     await ask("  Press ENTER to start...");
 
@@ -106,6 +108,7 @@ async function main(): Promise<void> {
       const state = createGame(20, 20);
       await runGameLoop(state);
 
+      // Drain buffered raw keypresses, then switch to line mode for the prompt
       await flushAndLineMode();
       const answer = await ask("  Play again? (y/n): ");
       console.log();
