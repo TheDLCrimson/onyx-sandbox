@@ -1,5 +1,4 @@
 projects/snake/game.ts
-```
 export type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";
 
 export interface Point {
@@ -79,7 +78,7 @@ export function stepGame(state: GameState): void {
   if (state.direction === "LEFT") newHead.x -= 1;
   if (state.direction === "RIGHT") newHead.x += 1;
 
-  // Wrap around walls
+  // Wall wrap-through
   newHead.x = ((newHead.x % state.width) + state.width) % state.width;
   newHead.y = ((newHead.y % state.height) + state.height) % state.height;
 
@@ -108,4 +107,3 @@ export function tickInterval(speed: number): number {
   // 120ms at speed 1, floors at 50ms
   return Math.max(50, 120 - (speed - 1) * 10);
 }
-```
