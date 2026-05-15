@@ -7,7 +7,7 @@ export interface Point {
 
 export interface GameState {
   snake: Point[];
-  food: Point;
+  apple: Point;
   direction: Direction;
   nextDirection: Direction;
   score: number;
@@ -30,7 +30,7 @@ export function createGame(width = 20, height = 20): GameState {
 
   return {
     snake,
-    food: spawnFood(snake, width, height),
+    apple: spawnFood(snake, width, height),
     direction: "RIGHT",
     nextDirection: "RIGHT",
     score: 0,
@@ -91,10 +91,10 @@ export function stepGame(state: GameState): void {
   state.snake.unshift(newHead);
 
   // Eat food?
-  if (newHead.x === state.food.x && newHead.y === state.food.y) {
+  if (newHead.x === state.apple.x && newHead.y === state.apple.y) {
     state.score += 1;
     state.speed = 1 + Math.floor(state.score / 5);
-    state.food = spawnFood(state.snake, state.width, state.height);
+    state.apple = spawnFood(state.snake, state.width, state.height);
   } else {
     state.snake.pop();
   }
