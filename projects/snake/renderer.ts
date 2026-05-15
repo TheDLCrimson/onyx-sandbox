@@ -78,7 +78,7 @@ function foodGlyph(tick: number): string {
 // ─── Main render ─────────────────────────────────────────────────────────────
 
 export function renderFrame(state: GameState, dead = false): void {
-  const { snake, food, direction, score, speed, tick, width, height } = state;
+  const { snake, apple, direction, score, speed, tick, width, height } = state;
 
   const snakeSet = new Map<string, number>();
   snake.forEach((p, i) => snakeSet.set(`${p.x},${p.y}`, i));
@@ -102,7 +102,7 @@ export function renderFrame(state: GameState, dead = false): void {
         const color = snakeColor(snakeIdx, snake.length, dead);
         const glyph = snakeIdx === 0 ? HEAD_GLYPH[direction] : BODY_GLYPH;
         row += color(glyph) + color(" ");
-      } else if (food.x === x && food.y === y) {
+      } else if (apple.x === x && apple.y === y) {
         row += foodGlyph(tick) + " ";
       } else {
         row += chalk.dim.gray(EMPTY_GLYPH) + " ";
