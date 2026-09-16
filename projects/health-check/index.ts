@@ -5,7 +5,13 @@ const port = Number.parseInt(process.env.PORT ?? "3000", 10);
 const startedAt = process.uptime();
 const version = "1.0.0";
 
+// Tracks the total number of incoming requests during this server process.
+let totalRequests = 0;
+const requestHistory: string[] = [];
+
 const server = http.createServer((request, response) => {
+  totalRequests += 1;
+  requestHistory.push(new Date().toISOString());
   response.setHeader("Content-Type", "application/json; charset=utf-8");
 
   if (request.method !== "GET") {
@@ -16,6 +22,12 @@ const server = http.createServer((request, response) => {
   }
 
   const pathname = new URL(request.url ?? "/", `http://${hostname}:${port}`).pathname;
+
+  if (pathname === "/metrics") {
+    response.statusCode = 200;
+    response.end(JSON.stringify({ requests: totalRequests, requestHistory }));
+    return;
+  }
 
   if (pathname === "/version") {
     response.statusCode = 200;
@@ -39,5 +51,5 @@ const server = http.createServer((request, response) => {
 });
 
 server.listen(port, hostname, () => {
-  console.log(`Health check server listening at http://${hostname}:${port}/health`);
+  console.log(`Health check server listening at http://${hostname}:${port}/health; requests recorded: ${totalRequests}`);
 });
