@@ -5,6 +5,7 @@ const port = Number.parseInt(process.env.PORT ?? "3000", 10);
 const startedAt = process.uptime();
 const version = "1.0.0";
 
+// Tracks the total number of incoming requests during this server process.
 let requestCount = 0;
 const requestHistory: string[] = [];
 
