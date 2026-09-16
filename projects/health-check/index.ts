@@ -23,7 +23,7 @@ const server = http.createServer((request, response) => {
     return;
   }
 
-  if (pathname !== "/health") {
+  if (pathname !== "/health" && pathname !== "/ready") {
     response.statusCode = 404;
     response.end(JSON.stringify({ error: "Not found" }));
     return;
@@ -39,5 +39,5 @@ const server = http.createServer((request, response) => {
 });
 
 server.listen(port, hostname, () => {
-  console.log(`Health check server listening at http://${hostname}:${port}/health`);
+  console.log(`Health check server listening at http://${hostname}:${port}/health and http://${hostname}:${port}/ready`);
 });
