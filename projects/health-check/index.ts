@@ -3,6 +3,7 @@ import http from "node:http";
 const hostname = process.env.HOST ?? "127.0.0.1";
 const port = Number.parseInt(process.env.PORT ?? "3000", 10);
 const startedAt = process.uptime();
+const version = "1.0.0";
 
 const server = http.createServer((request, response) => {
   response.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -14,7 +15,15 @@ const server = http.createServer((request, response) => {
     return;
   }
 
-  if (new URL(request.url ?? "/", `http://${hostname}:${port}`).pathname !== "/health") {
+  const pathname = new URL(request.url ?? "/", `http://${hostname}:${port}`).pathname;
+
+  if (pathname === "/version") {
+    response.statusCode = 200;
+    response.end(JSON.stringify({ version }));
+    return;
+  }
+
+  if (pathname !== "/health") {
     response.statusCode = 404;
     response.end(JSON.stringify({ error: "Not found" }));
     return;
